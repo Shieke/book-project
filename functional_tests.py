@@ -18,6 +18,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -35,8 +36,8 @@ class NewVisitorTest(unittest.TestCase):
         # She is invited to enter a to-do item straight away
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Enter a to-do item'
+                inputbox.get_attribute('placeholder'),
+                'Enter a to-do item'
         )
 
         # She types "Buy notebook" into a text box (Colleen's hobby
@@ -49,20 +50,27 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy notebook' for row in rows),
-            "New to-do item did not appear in table"
-        )
+        self.assertIn('1: Buy notebook', [row.text for row in rows])
 
         # There is still a text box inviting her to add another item. She
         # enters "Use notebook to write a story" (Colleen is very methodical)
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use notebook to write a story')
+        inputbox.send_keys(Keys.ENTER)
 
         # The page updates again, and now shows both items on her list
-
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy notebook', [row.text for row in rows])
+        self.assertIn(
+            '2: Use notebook to write a story' ,
+             [row.text for row in rows]
+        )
+        
         # Colleen wonders whether the site will remember her list. Then she sees
         # that the site has generated a unique URL for her -- there is some
-        # explanatory text to that effect
+        # explanatory text to that effect.
+        self.fail('Finish the test!')
 
         # She visits the URL - her to-do list is still there.
     
