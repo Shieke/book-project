@@ -4,7 +4,7 @@
 |                 FOR BOOK PROJECTS                 |
 |                                                   |
 |    AUTHOR: COLLEEN BERNUM     DATE: 10/04/2016    |
-|    FILENAME: functional_tests.py                  |
+|    FILENAME: test_simple_list_creation.py         |
 |                                                   |
 * - - - - - - - - - - - - - - - - - - - - - - - - - *
 
@@ -28,7 +28,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('To-Do', header_text)
         
         # She is invited to enter a to-do item straight away
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
                 'Enter a to-do item'
@@ -48,7 +48,7 @@ class NewVisitorTest(FunctionalTest):
 
         # There is still a text box inviting her to add another item. She
         # enters "Use notebook to write a story" (Colleen is very methodical)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Use notebook to write a story')
         inputbox.send_keys(Keys.ENTER)
 
@@ -72,7 +72,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Francis starts a new list by entering a new item. He
         # is less interesting than Colleen...
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
 
